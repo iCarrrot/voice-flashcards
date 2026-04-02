@@ -1,0 +1,152 @@
+[project]
+name = "voice-flashcards"
+version = "1.6.5"
+requires-python = "~=3.12.0"
+readme = "README.md"
+dependencies = [
+    "gTTS>=2.5.0",
+    "loguru>=0.7.3",
+    "mutagen>=1.47.0",
+    "pillow>=12.2.0",
+    "pydub>=0.25.1",
+    "PyYAML>=6.0",
+]
+
+
+[dependency-groups]
+dev = [
+    "mypy>=1.20.0",
+    "ruff>=0.15.8",
+    "tqdm>=4.67.1",
+    "types-pillow>=10.2.0.20240822",
+    "types-pyyaml>=6.0.12.20250915",
+    "watchdog>=6.0.0",
+]
+
+
+
+[tool.ruff]
+line-length = 120
+indent-width = 4
+target-version = "py312"
+
+[tool.ruff.lint]
+select = [
+    # pycodestyle
+    "E",
+    "W",
+    # Pyflakes
+    "F",
+    # pyupgrade
+    "UP",
+    # flake8-bugbear
+    "B",
+    # flake8-simplify
+    "SIM",
+    # isort
+    "I",
+    # Perflint
+    "PERF",
+    # pep8-naming
+    "N",
+    # pygrep-hooks
+    "PGH",
+    # Pylint
+    "PL",
+    # pyupgrade
+    "UP",
+    # Ruff-specific rules
+    "RUF",
+    # refurb
+    "FURB",
+    # pandas-vet
+    "PD",
+    # NumPy-specific rules
+    "NPY",
+    # Pathlib
+    "PTH",
+    # flake8-quotes
+    "Q",
+    # flake8-print
+    "T20",
+    # flake8-async
+    "ASYNC",
+    # flake8-bandit
+    "S",
+    # flake8-blind-except
+    "BLE",
+    # flake8-boolean-trap
+    "FBT",
+    # flake8-commas
+    "COM",
+    # flake8-comprehensions
+    "C4",
+    # flake8-datetimez
+    "DTZ",
+    # flake8-executable
+    "EXE",
+    # flake8-gettext
+    "INT",
+    # flake8-implicit-str-concat
+    "ISC",
+    # flake8-import-conventions
+    "ICN",
+    # flake8-logging
+    "LOG",
+    # flake8-pie
+    "PIE",
+    # flake8-pytest-style
+    "PT",
+    # flake8-raise
+    "RSE",
+    # flake8-return
+    "RET",
+    # flake8-self
+    "SLF",
+    # flake8-todos
+    "TD001",
+    "TD004",
+    "TD005",
+    "TD006",
+    "TD007",
+    # flake8-type-checking
+    "TC",
+    # flake8-unused-arguments
+    "ARG",
+]
+
+ignore = []
+fixable = ["ALL"]
+unfixable = []
+
+[tool.ruff.lint.pylint]
+max-args = 9
+max-returns = 7
+max-statements = 65
+
+[tool.ruff.format]
+# Like Black, use double quotes for strings.
+quote-style = "double"
+# Like Black, indent with spaces, rather than tabs.
+indent-style = "space"
+# Like Black, respect magic trailing commas.
+skip-magic-trailing-comma = false
+line-ending = "lf"
+
+# Enable auto-formatting of code examples in docstrings. Markdown,
+# reStructuredText code/literal blocks and doctests are all supported.
+docstring-code-format = true
+
+# Set the line length limit used when formatting code snippets in
+# docstrings.
+#
+# This only has an effect when the `docstring-code-format` setting is
+# enabled.
+docstring-code-line-length = "dynamic"
+
+
+
+[tool.mypy]
+disallow_untyped_defs = true
+ignore_missing_imports = true
+show_error_codes = true

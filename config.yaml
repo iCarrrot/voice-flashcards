@@ -1,0 +1,19 @@
+# Language codes (BCP-47): en, pl, de, fr, es, it, pt, ja, ko, zh-CN, etc.
+language_1: en
+language_2: pl
+
+# Separator between word and definition in the input file
+separator: " - "
+
+# How many times each word/definition is spoken
+repeat_word: 2
+repeat_definition: 1
+
+# Pause durations in milliseconds
+pause_after_word_ms: 800
+pause_after_definition_ms: 1200
+pause_between_repeats_ms: 600
+
+# Output settings
+output_dir: outputs
+speech_speed: slow  # "slow" or "normal"
