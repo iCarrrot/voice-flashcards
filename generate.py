@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import argparse
 import io
 import re
@@ -5,7 +7,11 @@ import sys
 from dataclasses import dataclass, fields
 from datetime import UTC, datetime
 from pathlib import Path
+from typing import TYPE_CHECKING
 from urllib.request import urlopen
+
+if TYPE_CHECKING:
+    from typing import Any
 
 import yaml
 from gtts import gTTS
@@ -37,14 +43,23 @@ class LessonConfig:
         return self.speech_speed == "slow"
 
 
-def load_config(path: Path) -> LessonConfig:
+LOCAL_CONFIG_FILE = "config.local.yaml"
+
+
+def _read_yaml(path: Path) -> dict[str, Any]:
     if not path.exists():
-        return LessonConfig()
+        return {}
     data = yaml.safe_load(path.read_text(encoding="utf-8"))
-    if not isinstance(data, dict):
-        return LessonConfig()
+    return data if isinstance(data, dict) else {}
+
+
+def load_config(path: Path) -> LessonConfig:
+    base = _read_yaml(path)
+    local = _read_yaml(path.parent / LOCAL_CONFIG_FILE)
+    merged = {**base, **local}
+
     valid_keys = {f.name for f in fields(LessonConfig)}
-    filtered = {k: v for k, v in data.items() if k in valid_keys}
+    filtered = {k: v for k, v in merged.items() if k in valid_keys}
     return LessonConfig(**filtered)
 
 
@@ -291,8 +306,9 @@ def process_file(
     output_dir: Path,
     *,
     cover_path: Path | None,
+    output_override: Path | None = None,
 ) -> None:
-    output_path = _resolve_output_path(input_path, output_dir)
+    output_path = output_override or _resolve_output_path(input_path, output_dir)
 
     if output_path.exists():
         logger.info("Skipping {} (already exists: {})", input_path.name, output_path)
@@ -332,7 +348,8 @@ def main() -> None:
     config = load_config(Path(args.config))
     input_path = Path(args.input)
 
-    output_dir = Path(args.output).parent if args.output else Path(config.output_dir)
+    output_override = Path(args.output) if args.output else None
+    output_dir = output_override.parent if output_override else Path(config.output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
 
     logger.info("Config:    {}", args.config)
@@ -350,7 +367,7 @@ def main() -> None:
     for i, file in enumerate(input_files):
         if len(input_files) > 1:
             logger.info("━━━ [{}/{}] {} ━━━", i + 1, len(input_files), file.name)
-        process_file(file, config, output_dir, cover_path=cover_path)
+        process_file(file, config, output_dir, cover_path=cover_path, output_override=output_override)
 
     if len(input_files) > 1:
         logger.success("All done! Processed {} file(s).", len(input_files))

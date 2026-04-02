@@ -63,6 +63,13 @@ output_dir: outputs     # where MP3 files are saved
 speech_speed: slow      # "slow" or "normal"
 ```
 
+For local overrides, create `config.local.yaml` (gitignored). Any key set there takes precedence over `config.yaml`:
+
+```yaml
+output_dir: outputs/my-local-dir
+speech_speed: normal
+```
+
 ## Output
 
 - MP3 files in `output_dir/`, named after the input file
